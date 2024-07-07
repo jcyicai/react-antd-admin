@@ -1,0 +1,10 @@
+# https://editorconfig.org
+root = true
+
+[*]
+charset = utf-8
+indent_style = space // 空格缩进
+indent_size = 2 // 缩进 2，默认 4
+end_of_line = lf // Line Feed 意思是换行，用符号 \n 表示
+insert_final_newline = true // 最后一个是否插入新行
+trim_trailing_whitespace = true // 修剪尾随空格
