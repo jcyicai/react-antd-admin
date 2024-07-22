@@ -21,3 +21,12 @@ type keys = 'id' | 'name'
 type User1 = {
   [k in keys]: any
 }
+type User2 = {
+  [k in K1]: any
+}
+
+const JC: User2 = {
+  id: 1,
+  name: 'jc',
+  age: 18
+}

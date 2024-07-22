@@ -7,7 +7,8 @@ import {
   redirect,
   useActionData,
   useLoaderData,
-  useParams
+  useParams,
+  useSearchParams
 } from 'react-router-dom'
 import App from './App.tsx'
 
@@ -128,10 +129,31 @@ async function loginAction({ request }: any) {
   return redirect('/')
 }
 
+function Payment() {
+  // 地址栏获取参数 ?id=1001
+  const [searchParams] = useSearchParams()
+  const id = searchParams.get('id')
+  // 地址栏 动态参数  order/1001
+  const data = useLoaderData()
+  console.log('payment init search params', searchParams.get('id'))
+  console.log('payment init loader data', data)
+  return <h2>付款组件，付款id:{id}</h2>
+}
+
+function paymentLoader({ params }: any) {
+  console.log('payment loader init', params)
+  return { id: 'jc' }
+}
+
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />
+  },
+  {
+    path: '/payment', // 'payment/:id'
+    element: <Payment />,
+    loader: paymentLoader
   },
   {
     path: '/login',
