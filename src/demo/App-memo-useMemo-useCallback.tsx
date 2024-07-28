@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo, memo, useCallback } from 'react'
 import { flushSync } from 'react-dom'
-import { useWindowSize } from '../utils'
+import { useWindowSize } from './utils'
 
 // memo 缓存组件 去除后父组件重新渲染会再次渲染
 const Child = memo(({ onClick }: any) => {
