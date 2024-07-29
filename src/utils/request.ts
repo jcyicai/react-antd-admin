@@ -7,16 +7,19 @@ const instance = axios.create({
   baseURL: '/api',
   timeout: 8000,
   timeoutErrorMessage: '请求超时，请稍后再试',
-  withCredentials: true // 跨域
+  withCredentials: true, // 跨域
+  headers: {
+    apifoxToken: 'RXuVPLvmdqh6m2qHPOx80'
+  }
 })
 
 // 请求拦截器
 instance.interceptors.request.use(
   config => {
     showLoading()
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('token') // 'RXuVPLvmdqh6m2qHPOx80'
     if (token) {
-      config.headers.Authorization = 'Token::' + token
+      config.headers.Authorization = 'Bearer ' + token
     }
     return {
       ...config
@@ -31,7 +34,7 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   (response: AxiosResponse) => {
     const data = response.data
-    //hideLoading()
+    hideLoading()
     if (data.code === 500001) {
       message.error(data.msg)
       localStorage.removeItem('token')

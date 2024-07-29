@@ -11,10 +11,10 @@ export default defineConfig({
     }
   },
   server: {
-    host: 'localhost',
-    port: 8080,
+    host: '0.0.0.0',
+    port: 9557,
     proxy: {
-      '/api': 'http://dev.react-antd-admin.com'
+      '/api': 'https://apifoxmock.com/m1/4899804-4556231-default'
     }
   }
 })
