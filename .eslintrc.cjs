@@ -13,6 +13,7 @@ module.exports = {
     'no-var': 0, // 要求使用 let 或 const 而不是 var
     '@typescript-eslint/no-explicit-any': 0,
     '@typescript-eslint/no-unused-vars': 0,
-    'no-constant-condition': 0
+    'no-constant-condition': 0,
+    '@typescript-eslint/no-namespace': 0
   }
 }

@@ -1,10 +1,12 @@
-import axios, { AxiosError, AxiosResponse } from 'axios'
+import axios from 'axios'
 import { hideLoading, showLoading } from './loading'
 import { message } from 'antd'
+import storage from './storage'
+import env from '@/config'
+import { Result } from '@/types/api'
 
 // 创建实例
 const instance = axios.create({
-  baseURL: '/api',
   timeout: 8000,
   timeoutErrorMessage: '请求超时，请稍后再试',
   withCredentials: true, // 跨域
@@ -17,35 +19,41 @@ const instance = axios.create({
 instance.interceptors.request.use(
   config => {
     showLoading()
-    const token = localStorage.getItem('token') // 'RXuVPLvmdqh6m2qHPOx80'
+    const token = storage.get('token') // 'RXuVPLvmdqh6m2qHPOx80'
     if (token) {
       config.headers.Authorization = 'Bearer ' + token
+    }
+    // mock 是否开启 配置不同接口地址
+    if (import.meta.env.VITE_MOCK === 'true') {
+      config.baseURL = env.mockApi
+    } else {
+      config.baseURL = env.baseApi
     }
     return {
       ...config
     }
   },
-  (error: AxiosError) => {
+  error => {
     return Promise.reject(error)
   }
 )
 
 // 响应拦截器
 instance.interceptors.response.use(
-  (response: AxiosResponse) => {
-    const data = response.data
+  response => {
+    const data: Result = response.data
     hideLoading()
     if (data.code === 500001) {
-      message.error(data.msg)
-      localStorage.removeItem('token')
+      message.error(data.message)
+      storage.remove('token')
       //location.href = '/login'
     } else if (data.code != 0) {
-      message.error(data.msg)
+      message.error(data.message)
       return Promise.reject(data)
     }
     return data.data
   },
-  (error: AxiosError) => {
+  error => {
     hideLoading()
     message.error(error.message)
     return Promise.reject(error.message)
