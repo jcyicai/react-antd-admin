@@ -4,13 +4,9 @@ import api from '@/api'
 import { Login } from '@/types/api'
 import storage from '@/utils/storage'
 
-interface LoginResult {
-  token: string
-}
-
 export default function LoginFC() {
   const onFinish = async (values: Login.params) => {
-    const res: LoginResult = (await api.login(values)) as LoginResult
+    const res = await api.login(values)
     console.log(res)
     storage.set('token', res.token)
     message.success('登录成功')

@@ -12,4 +12,7 @@ export namespace Login {
     username: string
     password: string
   }
+  export interface response {
+    token: string
+  }
 }
