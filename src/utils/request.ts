@@ -1,9 +1,9 @@
 import axios from 'axios'
 import { hideLoading, showLoading } from './loading'
-import { message } from 'antd'
 import storage from './storage'
 import env from '@/config'
 import { Result } from '@/types/api'
+import { message } from './AntdGlobal'
 
 // 创建实例
 const instance = axios.create({
@@ -18,7 +18,9 @@ const instance = axios.create({
 // 请求拦截器
 instance.interceptors.request.use(
   config => {
-    showLoading()
+    if (config.showLoading) {
+      showLoading()
+    }
     const token = storage.get('token') // 'RXuVPLvmdqh6m2qHPOx80'
     if (token) {
       config.headers.Authorization = 'Bearer ' + token
@@ -48,8 +50,12 @@ instance.interceptors.response.use(
       storage.remove('token')
       //location.href = '/login'
     } else if (data.code != 0) {
-      message.error(data.message)
-      return Promise.reject(data)
+      if (!response.config.showError) {
+        return Promise.resolve(data)
+      } else {
+        message.error(data.message)
+        return Promise.reject(data)
+      }
     }
     return data.data
   },
@@ -60,11 +66,16 @@ instance.interceptors.response.use(
   }
 )
 
+interface IConfig {
+  showLoading?: boolean
+  showError?: boolean
+}
+
 export default {
-  get<T>(url: string, params?: object): Promise<T> {
-    return instance.get(url, { params })
+  get<T>(url: string, params?: object, options: IConfig = { showLoading: true, showError: true }): Promise<T> {
+    return instance.get(url, { params, ...options })
   },
-  post<T>(url: string, params?: object): Promise<T> {
-    return instance.post(url, params)
+  post<T>(url: string, params?: object, options: IConfig = { showLoading: true, showError: true }): Promise<T> {
+    return instance.post(url, params, options)
   }
 }

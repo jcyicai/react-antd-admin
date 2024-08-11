@@ -1,8 +1,11 @@
 import request from '@/utils/request'
-import { Login } from '@/types/api'
+import { Login, User } from '@/types/api'
 
 export default {
   login(params: Login.params): Promise<Login.response> {
-    return request.post('/auth/login', params)
+    return request.post('/user/login', params, { showLoading: false })
+  },
+  getUserInfo() {
+    return request.get<User.UserItem>('/user/getUserInfo')
   }
 }
