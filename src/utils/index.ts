@@ -3,13 +3,15 @@
  */
 
 // 格式化金额（推荐）
-export const formatMoney = (num: number | string) => {
+export const formatMoney = (num?: number | string) => {
+  if (!num) return 0
   const a = parseFloat(num.toString())
   return a.toLocaleString('zh-CN', { style: 'currency', currency: 'CNY' })
 }
 
 // 格式化数字
-export const formatNum = (num: number | string) => {
+export const formatNum = (num?: number | string) => {
+  if (!num) return 0
   const a = num.toString()
   /**
    * 正则匹配是循环的
@@ -62,4 +64,10 @@ export const formatDate = (date?: Date, rule?: string) => {
   }
 
   return fmt
+}
+
+export const formatState = (state: number) => {
+  if (state === 1) return '在职'
+  if (state === 2) return '试用期'
+  if (state === 3) return '离职'
 }
