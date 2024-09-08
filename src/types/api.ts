@@ -6,6 +6,20 @@ export interface Result<T = any> {
   success: boolean
 }
 
+export interface ResultData<T = any> {
+  list: T[]
+  page: {
+    pageNum: number
+    pageSize: number
+    total: number | 0
+  }
+}
+
+export interface PageParams {
+  pageNum: number
+  pageSize: number
+}
+
 export namespace Login {
   export interface params {
     username: string
@@ -17,6 +31,11 @@ export namespace Login {
 }
 
 export namespace User {
+  export interface Params extends PageParams {
+    userId?: number
+    userName?: string
+    state?: number
+  }
   export interface UserItem {
     _id: string
     userId: number

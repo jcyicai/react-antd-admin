@@ -1,5 +1,6 @@
+import { params } from './../types/api'
 import request from '@/utils/request'
-import { Dashboard, Login, User } from '@/types/api'
+import { Dashboard, Login, ResultData, User } from '@/types/api'
 
 export default {
   // 登录
@@ -17,5 +18,9 @@ export default {
   // 获取折线图数据
   getLineData() {
     return request.get<Dashboard.LineData>('/order/dashboard/getLineData')
+  },
+  // 获取用户列表
+  getUserList(params: User.Params) {
+    return request.get<ResultData<User.UserItem>>('/users/list', params)
   }
 }

@@ -51,41 +51,8 @@ export default function DashBoard() {
   const [radarRef, radarChart] = useCharts()
 
   useEffect(() => {
-    lineChart?.setOption({
-      title: {
-        text: '订单和流水走势图'
-      },
-      legend: {
-        data: ['订单', '流水']
-      },
-      tooltip: {
-        trigger: 'axis'
-      },
-      grid: {
-        left: 50,
-        right: 50,
-        bottom: 20
-      },
-      xAxis: {
-        data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
-      },
-      yAxis: {
-        type: 'value'
-      },
-      series: [
-        {
-          name: '订单',
-          data: [150, 230, 224, 218, 135, 147, 260, 100, 88, 220, 111, 222],
-          type: 'line'
-        },
-        {
-          name: '流水',
-          data: [1500, 2300, 2240, 2180, 1350, 1470, 2600, 1000, 880, 2200, 1110, 2220],
-          type: 'line'
-        }
-      ]
-    })
-
+    renderLineChart()
+    // 其他替换类似 renderLineChart 调取接口 获取数据
     pieChart1?.setOption({
       title: {
         text: '司机城市分布',
@@ -173,6 +140,88 @@ export default function DashBoard() {
     })
   }, [lineChart, pieChart1, pieChart2, radarChart])
 
+  function getRandomInt(): number {
+    const min = Math.ceil(1)
+    const max = Math.floor(1000)
+    return Math.floor(Math.random() * (max - min + 1)) + min
+  }
+
+  // useEffect 不支持 async
+  const renderLineChart = async () => {
+    //const { data} = await api.getLineData()
+    const randomNum = getRandomInt()
+    const data = {
+      label: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+      order: [
+        randomNum * 1,
+        randomNum * 11,
+        randomNum * 3,
+        randomNum * 4,
+        randomNum * 5,
+        randomNum * 8,
+        randomNum * 7,
+        randomNum * 9,
+        randomNum * 6,
+        randomNum * 10,
+        randomNum * 2,
+        randomNum * 12
+      ],
+      momeny: [
+        randomNum * 100,
+        randomNum * 200,
+        randomNum * 1100,
+        randomNum * 400,
+        randomNum * 500,
+        randomNum * 1000,
+        randomNum * 700,
+        randomNum * 1200,
+        randomNum * 900,
+        randomNum * 600,
+        randomNum * 300,
+        randomNum * 800
+      ]
+    }
+
+    lineChart?.setOption({
+      title: {
+        text: '订单和流水走势图'
+      },
+      legend: {
+        data: ['订单', '流水']
+      },
+      tooltip: {
+        trigger: 'axis'
+      },
+      grid: {
+        left: 50,
+        right: 50,
+        bottom: 20
+      },
+      xAxis: {
+        data: data.label
+      },
+      yAxis: {
+        type: 'value'
+      },
+      series: [
+        {
+          name: '订单',
+          data: data.order,
+          type: 'line'
+        },
+        {
+          name: '流水',
+          data: data.momeny,
+          type: 'line'
+        }
+      ]
+    })
+  }
+
+  const handleRefresh = () => {
+    renderLineChart()
+  }
+
   useEffect(() => {
     getReportData()
   }, [])
@@ -207,7 +256,14 @@ export default function DashBoard() {
         </div>
       </div>
       <div className={styles.chart}>
-        <Card title='订单和流水走势图' extra={<Button type='primary'>刷新</Button>}>
+        <Card
+          title='订单和流水走势图'
+          extra={
+            <Button type='primary' onClick={handleRefresh}>
+              刷新
+            </Button>
+          }
+        >
           <div ref={lineRef} className={styles.itemChart}></div>
         </Card>
       </div>
