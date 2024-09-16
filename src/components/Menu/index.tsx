@@ -1,4 +1,8 @@
-import { DesktopOutlined, SettingOutlined, TeamOutlined } from '@ant-design/icons'
+import {
+  DesktopOutlined,
+  SettingOutlined,
+  TeamOutlined
+} from '@ant-design/icons'
 import { Menu } from 'antd'
 import styles from './index.module.less'
 import { useNavigate } from 'react-router-dom'
@@ -19,6 +23,11 @@ const SideMenu = () => {
         {
           key: 'userList',
           label: '用户管理',
+          icon: <TeamOutlined />
+        },
+        {
+          key: 'deptList',
+          label: '部门管理',
           icon: <TeamOutlined />
         }
       ]
@@ -46,7 +55,13 @@ const SideMenu = () => {
         <img src='/imgs/logo.png' alt='' className={styles.img} />
         <span>货运管理系统</span>
       </div>
-      <Menu defaultSelectedKeys={['1']} mode='inline' theme='dark' items={items} onClick={handleMenuClick} />
+      <Menu
+        defaultSelectedKeys={['1']}
+        mode='inline'
+        theme='dark'
+        items={items}
+        onClick={handleMenuClick}
+      />
     </div>
   )
 }

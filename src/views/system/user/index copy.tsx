@@ -7,46 +7,54 @@ import React, { useEffect, useRef, useState } from 'react'
 import CreateUser from './CreateUser'
 import { IAction } from '@/types/modal'
 import { message } from '@/utils/AntdGlobal'
-import { useAntdTable } from 'ahooks'
 
 export default function UserList() {
   const [form] = Form.useForm()
+  const [data, setData] = useState<User.UserItem[]>([])
+  const [total, setTotal] = useState(0)
   const [userIds, setUserIds] = useState<number[]>([])
   const userRef = useRef<{
     open: (type: IAction, data?: User.UserItem) => void
   }>()
-
-  // 参数第一个为分页，第二个为表单业务参数
-  const getTableData = (
-    {
-      current,
-      pageSize
-    }: {
-      current: number
-      pageSize: number
-    },
-    formData: User.Params
-  ) => {
-    return api
-      .getUserList({
-        ...formData,
-        pageNum: current,
-        pageSize: pageSize
-      })
-      .then(data => {
-        // 必须返回这个格式
-        return {
-          total: data.page.total,
-          list: data.list
-        }
-      })
-  }
-
-  // 第一个必须为 promise,第二个为表单参数
-  const { tableProps, search } = useAntdTable(getTableData, {
-    form
-    //defaultPageSize: 2
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10
   })
+  useEffect(() => {
+    getUserList({
+      pageNum: pagination.current,
+      pageSize: pagination.pageSize
+    })
+  }, [pagination.current, pagination.pageSize])
+
+  // 搜索
+  const handleSearch = () => {
+    const values = form.getFieldsValue()
+    getUserList({
+      ...values,
+      pageNum: 1
+    })
+  }
+  // 重置
+  const handleReset = () => {
+    form.resetFields()
+    const values = form.getFieldsValue()
+    getUserList({
+      ...values,
+      pageNum: 1
+    })
+  }
+  // 获取用户列表
+  const getUserList = async (params: PageParams) => {
+    const values = form.getFieldsValue()
+    const { list, page } = await api.getUserList({
+      ...values,
+      pageNum: params.pageNum,
+      pageSize: params.pageSize || pagination.pageSize
+    })
+    setData(list)
+    setTotal(page.total)
+  }
 
   // 创建用户
   const handleCreate = () => {
@@ -98,7 +106,9 @@ export default function UserList() {
       await api.deleteUser(params)
       message.success('删除成功')
       setUserIds([])
-      search.reset()
+      getUserList({
+        pageNum: 1
+      })
     } catch (error) {}
   }
 
@@ -197,10 +207,10 @@ export default function UserList() {
           </Select>
         </Form.Item>
         <Form.Item>
-          <Button type='primary' className='mr10' onClick={search.submit}>
+          <Button type='primary' className='mr10' onClick={handleSearch}>
             搜索
           </Button>
-          <Button type='default' onClick={search.reset}>
+          <Button type='default' onClick={handleReset}>
             重置
           </Button>
         </Form.Item>
@@ -219,7 +229,21 @@ export default function UserList() {
         </div>
         <Table
           rowKey='userId'
-          {...tableProps}
+          pagination={{
+            position: ['bottomRight'],
+            current: pagination.current,
+            pageSize: pagination.pageSize,
+            total,
+            showQuickJumper: true,
+            showSizeChanger: true,
+            showTotal: total => `共 ${total} 条`,
+            onChange: (page, pageSize) => {
+              setPagination({
+                current: page,
+                pageSize: pageSize
+              })
+            }
+          }}
           bordered
           rowSelection={{
             type: 'checkbox',
@@ -228,13 +252,16 @@ export default function UserList() {
               setUserIds(selectedRowKeys as number[])
             }
           }}
+          dataSource={data}
           columns={columns}
         />
       </div>
       <CreateUser
         mRef={userRef}
         update={() => {
-          search.reset()
+          getUserList({
+            pageNum: 1
+          })
         }}
       />
     </div>

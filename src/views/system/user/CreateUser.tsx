@@ -58,8 +58,8 @@ export default function CreateUser(props: IModalProp) {
   // 取消弹窗
   const handleCancel = () => {
     setVisible(false)
-    form.resetFields()
     setImg('')
+    form.resetFields()
   }
 
   const beforeUpload = (file: FileType) => {
@@ -111,18 +111,32 @@ export default function CreateUser(props: IModalProp) {
         <Form.Item
           label='用户名称'
           name='userName'
-          rules={[{ required: true, message: '请输入用户名称' }]}
+          rules={[
+            { required: true, message: '请输入用户名称' },
+            { min: 2, max: 12, message: '用户名称最小2个字符，最大12个字符' }
+          ]}
         >
           <Input placeholder='请输入用户名称' />
         </Form.Item>
         <Form.Item
           label='用户邮箱'
           name='userEmail'
-          rules={[{ required: true, message: '请输入用户邮箱' }]}
+          rules={[
+            { required: true, message: '请输入用户邮箱' },
+            { type: 'email', message: '邮箱格式错误' },
+            { pattern: /^\w+@qq.com$/, message: '邮箱必须以@qq.com结尾' }
+          ]}
         >
-          <Input placeholder='请输入用户邮箱' />
+          <Input placeholder='请输入用户邮箱' disabled={action === 'edit'} />
         </Form.Item>
-        <Form.Item label='手机号' name='mobile'>
+        <Form.Item
+          label='手机号'
+          name='mobile'
+          rules={[
+            { len: 11, message: '手机号必须为11位数字' },
+            { pattern: /1[1-9]\d{9}/, message: '手机号必须1开头的11位数字' }
+          ]}
+        >
           <Input type='number' placeholder='请输入手机号' />
         </Form.Item>
         <Form.Item
