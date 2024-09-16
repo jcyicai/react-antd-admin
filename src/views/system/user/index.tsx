@@ -1,15 +1,20 @@
 import api from '@/api'
 import { PageParams, User } from '@/types/api'
 import { formatDate } from '@/utils'
-import { Button, Form, Input, Select, Space, Table } from 'antd'
+import { Button, Form, Input, Modal, Select, Space, Table } from 'antd'
 import type { TableColumnsType } from 'antd'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import CreateUser from './CreateUser'
+import { IAction } from '@/types/modal'
+import { message } from '@/utils/AntdGlobal'
 
 export default function UserList() {
   const [form] = Form.useForm()
   const [data, setData] = useState<User.UserItem[]>([])
   const [total, setTotal] = useState(0)
+  const userRef = useRef<{
+    open: (type: IAction, data?: User.UserItem) => void | undefined
+  }>()
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10
@@ -43,20 +48,51 @@ export default function UserList() {
   // 获取用户列表
   const getUserList = async (params: PageParams) => {
     const values = form.getFieldsValue()
-    const data = await api.getUserList({
+    const { list, page } = await api.getUserList({
       ...values,
       pageNum: params.pageNum,
       pageSize: params.pageSize
     })
-    const list = Array.from({ length: 51 })
-      .fill({})
-      .map((item: any) => {
-        item = { ...data.list[0] }
-        item.userId = Math.random()
-        return item
-      })
     setData(list)
     setTotal(list.length)
+  }
+
+  // 创建用户
+  const handleCreate = () => {
+    userRef.current?.open('create')
+  }
+
+  // 编辑用户
+  const handleEdit = (record: User.UserItem) => {
+    userRef.current?.open('edit', record)
+  }
+
+  // 删除用户
+  const handleDelete = (userId: number) => {
+    Modal.confirm({
+      title: '删除确认',
+      content: <span>确认删除该用户吗？</span>,
+      okText: '确认',
+      cancelText: '取消',
+      onOk: () => {
+        handleUserDelSubmit([userId])
+      }
+    })
+  }
+
+  // 公共删除用户接口
+  const handleUserDelSubmit = async (ids: number[]) => {
+    try {
+      const params = {
+        userIds: ids
+      }
+      await api.deleteUser(params)
+      message.success('删除成功')
+      getUserList({
+        pageNum: 1,
+        pageSize: pagination.pageSize
+      })
+    } catch (error) {}
   }
 
   const columns: TableColumnsType<User.UserItem> = [
@@ -110,13 +146,20 @@ export default function UserList() {
     },
     {
       title: '操作',
-      dataIndex: 'operate',
       key: 'operate',
-      render(record, values) {
+      render(record: User.UserItem) {
+        // 当未设置 dataIndex，第一个参数则为 row 数据
+        // 否则 为 当前字段值，比如 createTime
         return (
           <Space>
-            <Button type='text'>编辑</Button>
-            <Button type='text' danger>
+            <Button type='text' onClick={() => handleEdit(record)}>
+              编辑
+            </Button>
+            <Button
+              type='text'
+              danger
+              onClick={() => handleDelete(record.userId)}
+            >
               删除
             </Button>
           </Space>
@@ -159,7 +202,9 @@ export default function UserList() {
         <div className='header-wrapper'>
           <div className='title'>用户列表</div>
           <div className='action'>
-            <Button type='primary'>新增</Button>
+            <Button type='primary' onClick={handleCreate}>
+              新增
+            </Button>
             <Button type='primary' danger>
               批量删除
             </Button>
@@ -188,7 +233,15 @@ export default function UserList() {
           columns={columns}
         />
       </div>
-      <CreateUser />
+      <CreateUser
+        mRef={userRef}
+        update={() => {
+          getUserList({
+            pageNum: 1,
+            pageSize: pagination.pageSize
+          })
+        }}
+      />
     </div>
   )
 }
