@@ -2,6 +2,8 @@
  * 工具函数封装
  */
 
+import { Menu } from '@/types/api'
+
 // 格式化金额（推荐）
 export const formatMoney = (num?: number | string) => {
   if (!num) return 0
@@ -61,14 +63,29 @@ export const formatDate = (date?: Date | string, rule?: string) => {
   }
 
   for (const k in O) {
-    fmt = fmt.replace(new RegExp(`${k}`), O[k] > 9 ? O[k].toString() : '0' + O[k].toString())
+    fmt = fmt.replace(
+      new RegExp(`${k}`),
+      O[k] > 9 ? O[k].toString() : '0' + O[k].toString()
+    )
   }
 
   return fmt
 }
 
+// 用户状态转换
 export const formatState = (state: number) => {
   if (state === 1) return '在职'
   if (state === 2) return '试用期'
   if (state === 3) return '离职'
+}
+
+// 获取页面路径
+export const getMenuPath = (list: Menu.MenuItem[]): string[] => {
+  return list.reduce((result: string[], item: Menu.MenuItem) => {
+    return result.concat(
+      Array.isArray(item.children) && !item.buttons
+        ? getMenuPath(item.children)
+        : item.path + ''
+    )
+  }, [])
 }

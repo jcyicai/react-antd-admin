@@ -37,7 +37,6 @@ export default function CreateUser(props: IModalProp) {
   // 提交
   const handleSubmit = async () => {
     const valid = await form.validateFields()
-    console.log(valid)
     if (valid) {
       const params = {
         ...form.getFieldsValue(),
@@ -95,7 +94,7 @@ export default function CreateUser(props: IModalProp) {
   }
   return (
     <Modal
-      title='创建用户'
+      title={action === 'create' ? '创建用户' : '编辑用户'}
       okText='确定'
       cancelText='取消'
       width={800}

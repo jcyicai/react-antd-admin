@@ -29,7 +29,7 @@ export namespace Login {
     token: string
   }
 }
-
+// 用户管理
 export namespace User {
   export interface Params extends PageParams {
     userId?: number
@@ -63,6 +63,62 @@ export namespace User {
   }
   export interface EditParams extends CreateParams {
     userId: number
+  }
+}
+// 部门管理
+export namespace Dept {
+  export interface Params {
+    deptName?: string
+  }
+  export interface CreateParams {
+    deptName: string
+    parentId?: string
+    userName: string
+  }
+  export interface EditParams extends CreateParams {
+    _id: string
+  }
+  export interface DelParams {
+    _id: string
+  }
+  export interface DeptItem {
+    _id: string
+    createTime: string
+    updateTime: string
+    deptName: string
+    parentId: string
+    userName: string
+    children: DeptItem[]
+  }
+}
+// 菜单管理
+export namespace Menu {
+  export interface Params {
+    menuName?: string
+    menuState?: number
+  }
+  export interface CreateParams {
+    menuName: string
+    icon?: string
+    menuType: number // 1菜单 2按钮 3页面
+    menuState: number // 1正常 2停用
+    menuCode?: string
+    parentId?: string
+    path?: string
+    component?: string
+    orderBy?: number
+  }
+  export interface EditParams extends CreateParams {
+    _id?: string
+  }
+  export interface DelParams {
+    _id: string
+  }
+  export interface MenuItem extends CreateParams {
+    _id: string
+    createTime: string
+    buttons?: MenuItem[]
+    children?: MenuItem[]
   }
 }
 
