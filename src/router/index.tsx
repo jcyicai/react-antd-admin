@@ -5,6 +5,7 @@ import DashBoard from '@/views/dashboard'
 import User from '@/views/system/user'
 import Dept from '@/views/system/dept'
 import Menu from '@/views/system/menu'
+import Role from '@/views/system/role'
 import Error404 from '@/views/404'
 import Error403 from '@/views/403'
 import Layout from '@/layout'
@@ -35,6 +36,10 @@ const router = [
       {
         path: '/menuList',
         element: <Menu />
+      },
+      {
+        path: '/roleList',
+        element: <Role />
       }
     ]
   },
