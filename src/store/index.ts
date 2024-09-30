@@ -16,6 +16,7 @@ import { User } from '@/types/api'
 export const useStore = create<{
   token: string
   userInfo: User.UserItem
+  collapsed: boolean
   updateUserInfo: (userInfo: User.UserItem) => void
   updateToken: (token: string) => void
 }>(set => ({
@@ -35,6 +36,7 @@ export const useStore = create<{
     mobile: '',
     job: ''
   },
+  collapsed: false,
   updateUserInfo: (userInfo: User.UserItem) => set({ userInfo }),
   updateToken: (token: string) => set({ token })
 }))

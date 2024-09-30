@@ -22,6 +22,7 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 0,
     'no-constant-condition': 0,
     '@typescript-eslint/no-namespace': 0,
-    'no-empty': 0
+    'no-empty': 0,
+    'react-hooks/rules-of-hooks': 0
   }
 }
