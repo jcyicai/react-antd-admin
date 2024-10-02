@@ -11,7 +11,7 @@ import Error403 from '@/views/403'
 import Layout from '@/layout'
 import AuthLoader from './AuthLoader'
 
-const router = [
+export const router = [
   {
     id: 'layout',
     element: <Layout />,
@@ -36,6 +36,9 @@ const router = [
       {
         path: '/menuList',
         element: <Menu />
+        /* meta: {
+          auth: false  // 权限关闭
+        } */
       },
       {
         path: '/roleList',
