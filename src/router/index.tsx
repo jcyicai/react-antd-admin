@@ -10,6 +10,7 @@ import Error404 from '@/views/404'
 import Error403 from '@/views/403'
 import Layout from '@/layout'
 import AuthLoader from './AuthLoader'
+import OrderList from '@/views/order/orderList'
 
 export const router = [
   {
@@ -43,6 +44,10 @@ export const router = [
       {
         path: '/roleList',
         element: <Role />
+      },
+      {
+        path: '/orderList',
+        element: <OrderList />
       }
     ]
   },

@@ -11,7 +11,7 @@ import roleApi from '@/api/roleApi'
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
-export default function CreateUser(props: IModalProp) {
+export default function CreateUser(props: IModalProp<User.EditParams>) {
   const [form] = Form.useForm()
   const [visible, setVisible] = useState(false)
   const [action, setAction] = useState<IAction>('create')

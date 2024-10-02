@@ -5,7 +5,7 @@ import { IAction, IModalProp } from '@/types/modal'
 import { Role } from '@/types/api'
 import api from '@/api'
 
-export default function CreateRole(props: IModalProp) {
+export default function CreateRole(props: IModalProp<Role.EditParams>) {
   const [form] = Form.useForm()
   const [visible, setVisible] = useState(false)
   const [action, setAction] = useState<IAction>('create')
