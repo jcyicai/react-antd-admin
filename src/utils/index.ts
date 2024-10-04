@@ -105,8 +105,29 @@ export const searchRoute: any = (path: string, routes: any = []) => {
  * 手机号加密
  * 17611000011 => 176*****0011
  */
-const formateMobile = (mobile?: number) => {
+export const formateMobile = (mobile?: number) => {
   if (!mobile) return '-'
   const phone = mobile.toString()
   return phone.replace(/(\d{3})\d*(\d{4})/, '$1****$2')
+}
+
+/**
+ * 递归查找树的路径
+ */
+export const findTreeNode = (
+  tree: Menu.MenuItem[],
+  pathName: string,
+  path: string[]
+): string[] => {
+  if (!tree) return []
+  for (const data of tree) {
+    path.push(data.menuName)
+    if (data.path === pathName) return path
+    if (data.children?.length) {
+      const list = findTreeNode(data.children, pathName, path)
+      if (list?.length) return list
+    }
+    path.pop()
+  }
+  return []
 }
