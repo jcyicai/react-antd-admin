@@ -118,6 +118,10 @@ export default function UserList() {
     } catch (error) {}
   }
 
+  const handleExport = async () => {
+    await orderApi.exportData(form.getFieldsValue())
+  }
+
   const columns: TableColumnsType<Order.OrderItem> = [
     {
       title: '订单编号',
@@ -230,6 +234,9 @@ export default function UserList() {
             {/* 权限按钮 */}
             <Button type='primary' onClick={handleCreate}>
               新增
+            </Button>
+            <Button type='primary' onClick={handleExport}>
+              导出
             </Button>
           </div>
         </div>

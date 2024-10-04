@@ -15,6 +15,15 @@ export default {
   },
   updateOrderInfo(params: Order.OrderRoute) {
     return request.post('/order/edit', params)
+  },
+  exportData(params: Order.Params) {
+    return request.downloadFile('/order/orderExport', params, '订单列表.xlsx')
+  },
+  // 获取城市聚合数据
+  getCityData(cityId: number) {
+    return request.get<Array<{ lng: string; lat: string }>>(
+      `/order/cluster/${cityId}`
+    )
   }
   /*   // 编辑订单
   editOrder(params: Order.EditParams) {

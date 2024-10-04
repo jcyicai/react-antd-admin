@@ -11,6 +11,8 @@ import Error403 from '@/views/403'
 import Layout from '@/layout'
 import AuthLoader from './AuthLoader'
 import OrderList from '@/views/order/orderList'
+import OrderCluster from '@/views/order/orderCluster'
+import DriverList from '@/views/order/driverList'
 
 export const router = [
   {
@@ -48,6 +50,14 @@ export const router = [
       {
         path: '/orderList',
         element: <OrderList />
+      },
+      {
+        path: '/cluster',
+        element: <OrderCluster />
+      },
+      {
+        path: '/driverList',
+        element: <DriverList />
       }
     ]
   },
