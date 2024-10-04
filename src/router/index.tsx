@@ -1,18 +1,11 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import Login from '@/views/login/Login'
-import Welcome from '@/views/welcome'
-import DashBoard from '@/views/dashboard'
-import User from '@/views/system/user'
-import Dept from '@/views/system/dept'
-import Menu from '@/views/system/menu'
-import Role from '@/views/system/role'
 import Error404 from '@/views/404'
 import Error403 from '@/views/403'
 import Layout from '@/layout'
 import AuthLoader from './AuthLoader'
-import OrderList from '@/views/order/orderList'
-import OrderCluster from '@/views/order/orderCluster'
-import DriverList from '@/views/order/driverList'
+import { lazyLoad } from './LazyLoad' // 懒加载
+import React from 'react'
 
 export const router = [
   {
@@ -22,42 +15,44 @@ export const router = [
     children: [
       {
         path: '/welcome',
-        element: <Welcome />
+        element: lazyLoad(React.lazy(() => import('@/views/welcome')))
       },
       {
         path: '/dashboard',
-        element: <DashBoard />
+        element: lazyLoad(React.lazy(() => import('@/views/dashboard')))
       },
       {
         path: '/userList',
-        element: <User />
+        element: lazyLoad(React.lazy(() => import('@/views/system/user')))
       },
       {
         path: '/deptList',
-        element: <Dept />
+        element: lazyLoad(React.lazy(() => import('@/views/system/dept')))
       },
       {
         path: '/menuList',
-        element: <Menu />
+        element: lazyLoad(React.lazy(() => import('@/views/system/menu')))
         /* meta: {
           auth: false  // 权限关闭
         } */
       },
       {
         path: '/roleList',
-        element: <Role />
+        element: lazyLoad(React.lazy(() => import('@/views/system/role')))
       },
       {
         path: '/orderList',
-        element: <OrderList />
+        element: lazyLoad(React.lazy(() => import('@/views/order/orderList')))
       },
       {
         path: '/cluster',
-        element: <OrderCluster />
+        element: lazyLoad(
+          React.lazy(() => import('@/views/order/orderCluster'))
+        )
       },
       {
         path: '/driverList',
-        element: <DriverList />
+        element: lazyLoad(React.lazy(() => import('@/views/order/driverList')))
       }
     ]
   },

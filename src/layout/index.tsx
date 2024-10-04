@@ -15,11 +15,12 @@ import { useStore } from '@/store'
 import { IAuthLoader } from '@/router/AuthLoader'
 import { router } from '@/router'
 import { searchRoute } from '@/utils'
+import TabsFC from '@/components/Tabs'
 
 const { Sider } = Layout
 
 const App: React.FC = () => {
-  const updateUserInfo = useStore(state => state.updateUserInfo)
+  const { collapsed, userInfo, updateUserInfo } = useStore()
   const { pathname } = useLocation()
   useEffect(() => {
     getUserInfo()
@@ -30,12 +31,12 @@ const App: React.FC = () => {
     updateUserInfo(data)
   }
 
+  // 权限判断
+  const data = useRouteLoaderData('layout') as IAuthLoader
   const route = searchRoute(pathname, router)
   if (route && route.meta?.auth === false) {
     // 继续执行
   } else {
-    // 权限判断
-    const data = useRouteLoaderData('layout') as IAuthLoader
     const staticPath = ['/welcome', '/403', '/404']
     if (
       !data.menuPathList.includes(pathname) &&
@@ -47,20 +48,23 @@ const App: React.FC = () => {
 
   return (
     <Watermark content='React'>
-      <Layout>
-        <Sider>
-          <Menu />
-        </Sider>
+      {userInfo._id ? (
         <Layout>
-          <NavHeader />
-          <div className={styles.content}>
-            <div className={styles.wrapper}>
-              <Outlet></Outlet>
+          <Sider collapsed={collapsed}>
+            <Menu />
+          </Sider>
+          <Layout>
+            <NavHeader />
+            <TabsFC></TabsFC>
+            <div className={styles.content}>
+              <div className={styles.wrapper}>
+                <Outlet></Outlet>
+              </div>
+              <NavFooter />
             </div>
-            <NavFooter />
-          </div>
+          </Layout>
         </Layout>
-      </Layout>
+      ) : null}
     </Watermark>
   )
 }
