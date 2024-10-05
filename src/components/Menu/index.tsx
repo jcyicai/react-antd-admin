@@ -15,7 +15,7 @@ import * as Icons from '@ant-design/icons'
 const SideMenu = () => {
   const [menuList, setMenuList] = useState<MenuItem[]>([])
   const navigate = useNavigate()
-  const collapsed = useStore(state => state.collapsed)
+  const { collapsed, isDark } = useStore()
   const data: any = useRouteLoaderData('layout')
   const [selectedKeys, setSelectedKeys] = useState<string[]>([])
 
@@ -119,15 +119,18 @@ const SideMenu = () => {
   }
 
   return (
-    <div>
+    <div className={styles.navSide}>
       <div className={styles.logo} onClick={handleClickLogo}>
         <img src='/imgs/logo.png' alt='' className={styles.img} />
-        <span>货运管理系统</span>
+        {collapsed ? '' : <span>货运管理系统</span>}
       </div>
       <Menu
-        defaultSelectedKeys={['1']}
         mode='inline'
-        theme='dark'
+        theme={isDark ? 'light' : 'dark'}
+        style={{
+          width: collapsed ? 80 : 'auto',
+          height: 'calc(100vh - 50px)'
+        }}
         items={menuList}
         selectedKeys={selectedKeys}
         onClick={handleMenuClick}

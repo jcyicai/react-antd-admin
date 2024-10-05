@@ -67,7 +67,7 @@ export default function TabsFC() {
       tabBarStyle={{
         height: 40,
         marginBottom: 0,
-        backgroundColor: '#fff'
+        backgroundColor: 'var(--dark-bg-color)'
       }}
       type='editable-card'
       hideAdd
