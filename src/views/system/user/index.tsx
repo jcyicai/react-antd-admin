@@ -9,6 +9,7 @@ import { IAction } from '@/types/modal'
 import { message } from '@/utils/AntdGlobal'
 import { useAntdTable } from 'ahooks'
 import AuthButton from '@/components/AuthButton'
+import SearchForm from '@/components/SearchForm'
 
 export default function UserList() {
   const [form] = Form.useForm()
@@ -177,11 +178,11 @@ export default function UserList() {
   ]
   return (
     <div className='user-list'>
-      <Form
-        className='search-form'
+      <SearchForm
         form={form}
-        layout='inline'
         initialValues={{ state: 0 }}
+        submit={search.submit}
+        reset={search.reset}
       >
         <Form.Item name='userId' label='用户ID'>
           <Input placeholder='请输入' />
@@ -197,15 +198,7 @@ export default function UserList() {
             <Select.Option value={3}>试用期</Select.Option>
           </Select>
         </Form.Item>
-        <Form.Item>
-          <Button type='primary' className='mr10' onClick={search.submit}>
-            搜索
-          </Button>
-          <Button type='default' onClick={search.reset}>
-            重置
-          </Button>
-        </Form.Item>
-      </Form>
+      </SearchForm>
       <div className='base-table'>
         <div className='header-wrapper'>
           <div className='title'>用户列表</div>

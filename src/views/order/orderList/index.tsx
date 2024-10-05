@@ -4,7 +4,7 @@ import { formatDate, formatMoney } from '@/utils'
 import { Button, Form, Input, Modal, Select, Space, Table } from 'antd'
 import type { TableColumnsType } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
-import CreateOrder from './components/CreateOrder'
+import CreateOrderNew from './components/CreateOrderNew'
 import OrderDetail from './components/OrderDetail'
 import OrderMarker from './components/OrderMarker'
 import OrderRoute from './components/OrderRoute'
@@ -242,7 +242,7 @@ export default function UserList() {
         </div>
         <Table rowKey='_id' {...tableProps} bordered columns={columns} />
       </div>
-      <CreateOrder
+      <CreateOrderNew
         mRef={orderRef}
         update={() => {
           search.reset()
